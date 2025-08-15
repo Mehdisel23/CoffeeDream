@@ -1,9 +1,7 @@
 from gc import get_objects
 
+from django.contrib.postgres.search import TrigramSimilarity
 from django.core.cache import cache
-from django.shortcuts import render
-from django.utils.decorators import method_decorator
-from django.views.decorators.cache import cache_page
 from rest_framework import permissions, status
 from rest_framework.generics import CreateAPIView, ListAPIView, RetrieveAPIView, UpdateAPIView, get_object_or_404
 from rest_framework.parsers import MultiPartParser, FormParser
@@ -11,8 +9,10 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from caffe.models import Coffee
-from caffe.serializers import AddNewCoffeSerializer, CoffeSerializer, BuyCoffeSerializer
+from caffe.serializers import AddNewCoffeSerializer, CoffeSerializer, BuyCoffeSerializer, SearchCoffeSerializer
+from userapp.models import Seller
 from userapp.permissions import IsSellerPermission, IsAdminPermission, IsClientPermission
+from userapp.serializers import SearchRestaurantsSerializer
 
 
 # Create your views here.
@@ -63,8 +63,8 @@ class AddCoffeeView(CreateAPIView):
     def clear_coffee_cache(self):
         """Clear all coffee list cache pages"""
         try:
-            # Clear Redis cache - adjust range based on your expected max pages
-            for page in range(1, 21):  # Clear up to 20 pages
+            # Clear Redis cache
+            for page in range(1, 21):  #
                 cache_key = f"coffeList_page_{page}"
                 cache.delete(cache_key)
 
@@ -156,4 +156,39 @@ class DeleteCoffeeView(APIView):
             return Response({"message": "Coffee deleted successfully"}, status=status.HTTP_204_NO_CONTENT)
         except Coffee.DoesNotExist:
             return Response({"error": "Product not found"}, status=status.HTTP_404_NOT_FOUND)
+
+
+class GetAddedCoffeeBySellerView(ListAPIView):
+    permission_classes = [IsSellerPermission]
+    serializer_class = CoffeSerializer
+    def get_queryset(self):
+        cached_data = cache.get('coffee')
+        if cached_data:
+            return cached_data
+        queryset = Coffee.objects.filter(added_by = self.request.user)
+        cache.set('coffee_per_user', queryset, 60 * 5)
+        return queryset
+
+
+class SearchCoffeeView(ListAPIView):
+    serializer_class = SearchCoffeSerializer
+
+    def get_queryset(self):
+        queryset = Coffee.objects
+        name = self.request.query_params.get('name')
+        type = self.request.query_params.get('type')
+        address = self.request.query_params.get('address')
+
+        if name:
+            queryset = queryset.annotate(
+                similarity=TrigramSimilarity('name', name)
+            ).filter(similarity__gt=0.2).order_by('-similarity')
+        if type:
+            queryset = queryset.annotate(
+                similarity=TrigramSimilarity('type', type)
+            ).filter(similarity__gt=0.3).order_by('-similarity')
+        if address:
+            queryset = queryset.filter(added_by__seller__address__icontains=address)
+
+        return queryset
 

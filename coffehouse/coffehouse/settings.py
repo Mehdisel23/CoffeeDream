@@ -139,6 +139,7 @@ REST_FRAMEWORK = {
 
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:4200',
+    'http://127.0.0.1:4200',
 ]
 
 SESSION_COOKIE_AGE = 1209600  # 2 weeks
@@ -146,9 +147,7 @@ SESSION_SAVE_EVERY_REQUEST = True
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False
 
 # For development (localhost)
-SESSION_COOKIE_SECURE = False  # Set to True in production with HTTPS
-SESSION_COOKIE_HTTPONLY = True
-SESSION_COOKIE_SAMESITE = 'Lax'
+
 
 CORS_ALLOW_HEADERS = [
     'accept',
@@ -184,6 +183,10 @@ FRONTEND_URL = 'http://localhost:4200'
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
+
+CSRF_TRUSTED_ORIGINS = [
+    'http://localhost:4200',
+]
 
 LANGUAGE_CODE = 'en-us'
 

@@ -1,22 +1,27 @@
 from django.contrib.auth.tokens import default_token_generator
+from django.contrib.postgres.search import TrigramSimilarity
+from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.mail import send_mail
-from django.shortcuts import render
-from django.utils.encoding import force_bytes
-from django.utils.http import urlsafe_base64_encode
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.exceptions import ValidationError
+from rest_framework.generics import RetrieveUpdateAPIView, ListAPIView, RetrieveAPIView
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import TokenObtainPairView
 
+from caffe.models import Coffee
 from coffehouse import settings
 from userapp.models import User, Seller
 from userapp.permissions import IsSellerPermission
 from userapp.serializers import UserRegisterSerializer, CustomTokenObtainPairSerializer, ResetPasswordRequestSerializer, \
-    SellerRegisterSerializer, SellerProfileSerializer
+    SellerRegisterSerializer, SellerProfileSerializer, AddImageProfileSellerSerializer, UpdateSellerProfileSerializer, \
+    GetAllRestaurnetsSerializer, SearchRestaurantsSerializer, RestaurantSerializer
 
 
 # Create your views here.
@@ -112,21 +117,6 @@ class CustomTokenObtainPairView(TokenObtainPairView):
         response = Response({'message': 'Login successful', 'role': role , 'access': access, 'refresh': refresh},
                             status=status.HTTP_200_OK)
 
-        response.set_cookie(
-            key='access',
-            value=access,
-            httponly=True,
-            secure=False,
-            samesite = 'Lax',
-            max_age=3600)
-        response.set_cookie(
-            key='refresh',
-            value=refresh,
-            httponly=True,
-            secure=False,
-            samesite = 'Lax',
-            max_age=60*60*24
-        )
 
         return response
 '''
@@ -209,19 +199,113 @@ class SellerProfileView(APIView):
         except ObjectDoesNotExist:
             return Response({"error": "Seller profile not found here."}, status=404)
         serializer = SellerProfileSerializer(seller)
-        return Response(serializer.data)
+        return Response(serializer.data , status= status.HTTP_200_OK)
 
-
+@method_decorator(csrf_exempt, name='dispatch')
 class Logout(APIView):
-
+    permission_classes = [IsAuthenticated]
     def post(self, request, *args, **kwargs):
-        refresh = request.COOKIES.get('refresh')
-        if refresh:
+        print(f"=== LOGOUT DEBUG ===")
+        print(f"Request method: {request.method}")
+        print(f"Request data: {request.data}")
+        print(f"Content-Type: {request.content_type}")
+        print(f"Authorization header: {request.headers.get('Authorization', 'Not present')}")
+        print(f"===================")
+        refresh= request.data.get("refresh_token")
+        print(refresh)
+
+        if not refresh:
+            return Response(
+                {"error": "Refresh token is required"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        try:
             token = RefreshToken(refresh)
             token.blacklist()
+            return Response(
+                {"message": "Logged out and token blacklisted"},
+                status=status.HTTP_200_OK
+            )
+        except Exception as e:
+            return Response(
+                {"error": "Invalid token or token already blacklisted"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
 
 
-        response = Response({"message": "Logged out and token blacklisted"}, status=200)
-        response.delete_cookie("access_token")
-        response.delete_cookie("refresh_token")
-        return response
+class AddImageSellerProfileView(APIView):
+    permission_classes = [IsSellerPermission]
+    def patch(self, request, *args, **kwargs):
+        user = request.user
+
+        try:
+            seller = user.seller
+        except Seller.DoesNotExist:
+            return Response({
+                'error': 'Seller profile does not exist'
+            }, status=status.HTTP_404_NOT_FOUND)
+
+        serializer = AddImageProfileSellerSerializer(seller , data=request.data,
+                                             context={'request': request})
+
+
+        if serializer.is_valid(raise_exception=True):
+            updated_seller = serializer.save()
+            return  Response({
+                'message': 'Image added successfully',
+                'data': {
+                    'id': updated_seller.id,
+                    'image': request.build_absolute_uri(updated_seller.image.url) if updated_seller.image else None,
+                    'full_name': updated_seller.user.full_name,
+                    'email': updated_seller.user.email,
+                    'phone_number': updated_seller.phone_number,
+                    'address': updated_seller.address,
+                    'description': updated_seller.description,
+                }
+            }, status=status.HTTP_200_OK)
+        else:
+            return Response({
+                    'error': 'Validation failed',
+                    'details': serializer.errors
+                }, status=status.HTTP_400_BAD_REQUEST)
+
+
+class SellerProfileUpdateView(RetrieveUpdateAPIView):
+    serializer_class = UpdateSellerProfileSerializer
+    permission_classes = [IsSellerPermission]
+
+    def get_object(self):
+
+        return self.request.user.seller
+
+
+class GetAllRestaurants(ListAPIView):
+    serializer_class = GetAllRestaurnetsSerializer
+
+    def get_queryset(self):
+
+        cached_date = cache.get('restaurants')
+        if cached_date:
+            return cached_date
+        queryset = Seller.objects.all().order_by('id')
+        cache.set('restaurants', queryset, 60 * 5)
+        return queryset
+
+
+class SearchRestaurantsView(ListAPIView):
+    serializer_class = SearchRestaurantsSerializer
+
+    def get_queryset(self):
+        queryset = Seller.objects
+        address = self.request.query_params.get('address')
+
+        queryset = queryset.annotate(
+            similarity=TrigramSimilarity('address', address)
+        ).filter(similarity__gt=0.2).order_by('-similarity')
+
+        return queryset
+
+class GetRestaurentById(RetrieveAPIView):
+    serializer_class = RestaurantSerializer
+    queryset = Seller.objects.all()
+

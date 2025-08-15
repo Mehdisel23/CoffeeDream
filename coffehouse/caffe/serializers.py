@@ -4,6 +4,7 @@ from rest_framework import serializers
 
 from caffe.models import Coffee
 from userapp.models import ClientHistory
+from userapp.serializers import SellerProfileSerializer, UserSerializer
 
 
 class AddNewCoffeSerializer(serializers.ModelSerializer):
@@ -88,12 +89,22 @@ class CoffeeUpdateSerializer(serializers.ModelSerializer):
 
 
 class CoffeSerializer(serializers.ModelSerializer):
+    added_by = UserSerializer()
+
     class Meta:
         model = Coffee
         fields = '__all__'
 
 
+class SearchCoffeSerializer(serializers.ModelSerializer):
+    name = serializers.CharField(required=False)
+    type = serializers.CharField(required=False)
+    address = serializers.CharField(required=False)
+    added_by = UserSerializer(required=False)
 
+    class Meta:
+        model = Coffee
+        fields = "__all__"
 
 
 

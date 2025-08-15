@@ -1,0 +1,58 @@
+# =========================
+# Python / Django (backend)
+# =========================
+coffeehouse/__pycache__/
+coffeehouse/*.py[cod]
+coffeehouse/env/        # if you have a virtualenv here
+coffeehouse/media/
+coffeehouse/settings.py
+
+# Django migrations (ignore except __init__.py)
+*/migrations/*.py
+!*/migrations/__init__.py
+
+# Redis
+dump.rdb
+*.aof
+
+# =========================
+# Node / Angular (frontend)
+# =========================
+coffe-house-front/node_modules/
+coffe-house-front/dist/
+coffe-house-front/.angular/cache/
+coffe-house-front/npm-debug.log
+coffe-house-front/yarn-error.log
+coffe-house-front/tmp/
+coffe-house-front/out-tsc/
+coffe-house-front/bazel-out/
+
+# =========================
+# IDEs and editors
+# =========================
+.vscode/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.idea/
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+.history/
+
+# =========================
+# Miscellaneous / system
+# =========================
+.DS_Store
+Thumbs.db
+.sass-cache/
+connect.lock
+coverage/
+libpeerconnection.log
+testem.log
+typings/
+.env

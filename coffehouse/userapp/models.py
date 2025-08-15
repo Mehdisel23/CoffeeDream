@@ -41,15 +41,19 @@ class ClientHistory(models.Model):
     description = models.TextField(blank=True, null=True)
     date = models.DateTimeField(default=timezone.now)
 
+
     class Meta:
         db_table = 'clienthistories'
         ordering = ['-date']
 
 class Seller(models.Model):
     user= models.OneToOneField(User, on_delete=models.CASCADE , related_name='seller')
-    phone_number = models.CharField(max_length=20)
+    phone_number = models.CharField(blank = True , max_length=20)
     description = models.TextField(blank=True, null=True)
     address = models.TextField(blank=True, null=True)
+    image = models.ImageField(upload_to='seller/', blank=True, null=True)
+    rating = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
+
 
     class Meta:
         db_table = 'sellers'

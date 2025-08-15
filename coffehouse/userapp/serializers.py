@@ -6,6 +6,7 @@ from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.tokens import RefreshToken
 
+from caffe.models import Coffee
 from userapp.models import User, Seller
 
 
@@ -14,7 +15,7 @@ class UserRegisterSerializer(serializers.ModelSerializer):
     confirm_password = serializers.CharField(style={'input_type': 'password'}, write_only=True)
     class Meta:
         model = User
-        fields = ('full_name','email', 'password', 'confirm_password' , 'role')
+        fields = ('full_name','email', 'password', 'confirm_password' , 'role' )
 
     def validate(self, attrs):
         password = attrs.get('password')
@@ -155,4 +156,105 @@ class SellerProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Seller
-        fields = ('email', 'full_name' , 'description' , "phone_number" , "address")
+        fields = ('email', 'full_name' , 'description' , "phone_number" , "address", "image")
+
+
+class CustomProfileSellerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Seller
+        fields ='__all__'
+
+
+
+class AddImageProfileSellerSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Seller
+        fields =['image']
+
+    def validate(self, attrs):
+        image = attrs.get('image')
+        if not image :
+            raise serializers.ValidationError("Image field is required")
+        return attrs
+
+    def update(self, instance, validated_data):
+        image = validated_data.pop('image')
+        user = self.context['request'].user
+
+
+        instance.image = image
+        instance.save()
+        return instance
+
+
+
+
+class UpdateSellerProfileSerializer(serializers.ModelSerializer):
+    full_name = serializers.CharField(source='user.full_name', required=False)
+    email = serializers.EmailField(source='user.email', required=False)
+    class Meta:
+        model = Seller
+        fields =['full_name', 'email', 'phone_number', 'address', 'description']
+
+    def update(self, instance, validated_data):
+
+        user_data = validated_data.pop('user', {})
+
+        user = instance.user
+        full_name = user_data.get('full_name')
+        email = user_data.get('email')
+
+        if full_name:
+            user.full_name = full_name
+        if email:
+            user.email = email
+        user.save()
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+        instance.save()
+        return instance
+
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = [ 'full_name', 'email' ]
+
+class UserSerializerOneField(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = [ 'full_name']
+
+
+class GetAllRestaurnetsSerializer(serializers.ModelSerializer):
+    user = UserSerializerOneField(read_only=True)
+    class Meta:
+        model = Seller
+        fields = ['id', 'user', 'phone_number', 'description', 'address', 'image', 'rating']
+
+
+class SearchRestaurantsSerializer(serializers.ModelSerializer):
+    address = serializers.CharField(required = True)
+    class Meta:
+        model = Seller
+        fields = ['id', 'user', 'phone_number', 'description', 'address', 'image' , 'rating']
+
+
+class RestaurantSerializer(serializers.ModelSerializer):
+    user = UserSerializerOneField(read_only =True)
+    class Meta:
+        model = Seller
+        fields = '__all__'
+
+
+class RateRestaurentSerializer(serializers.ModelSerializer):
+    pass
+
+
+class CoffeeRestaurantSerializer(serializers.ModelSerializer):
+
+    seller = RestaurantSerializer(read_only=True)
+    class Meta:
+        model = User
+        fields = ['full_name ' , 'seller']
