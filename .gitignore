@@ -2,14 +2,24 @@
 # Python / Django (backend)
 # =========================
 coffeehouse/__pycache__/
+coffeehouse/*/__pycache__/
 coffeehouse/*.py[cod]
-coffeehouse/env/        # if you have a virtualenv here
+coffeehouse/*/*.py[cod]
+coffeehouse/*$py.class
+coffeehouse/env/
+coffeehouse/venv/
+coffeehouse/.env
 coffeehouse/media/
-coffeehouse/settings.py
+coffeehouse/staticfiles/
+
+# Django specific
+coffeehouse/db.sqlite3
+coffeehouse/local_settings.py
+coffeehouse/coffeehouse/settings.py
 
 # Django migrations (ignore except __init__.py)
-*/migrations/*.py
-!*/migrations/__init__.py
+coffeehouse/*/migrations/*.py
+!coffeehouse/*/migrations/__init__.py
 
 # Redis
 dump.rdb
@@ -21,11 +31,20 @@ dump.rdb
 coffe-house-front/node_modules/
 coffe-house-front/dist/
 coffe-house-front/.angular/cache/
+coffe-house-front/.angular/
 coffe-house-front/npm-debug.log
 coffe-house-front/yarn-error.log
+coffe-house-front/yarn.lock
+coffe-house-front/package-lock.json
 coffe-house-front/tmp/
 coffe-house-front/out-tsc/
 coffe-house-front/bazel-out/
+coffe-house-front/.nx/cache
+coffe-house-front/coverage/
+
+# Angular environment files (if you have different configs)
+coffe-house-front/src/environments/environment.prod.ts
+coffe-house-front/src/environments/environment.local.ts
 
 # =========================
 # IDEs and editors
@@ -42,6 +61,7 @@ coffe-house-front/bazel-out/
 *.launch
 .settings/
 *.sublime-workspace
+*.sublime-project
 .history/
 
 # =========================
@@ -51,8 +71,22 @@ coffe-house-front/bazel-out/
 Thumbs.db
 .sass-cache/
 connect.lock
-coverage/
 libpeerconnection.log
 testem.log
 typings/
 .env
+*.log
+
+# =========================
+# Git and version control
+# =========================
+*.orig
+*.rej
+
+# =========================
+# Temporary files
+# =========================
+*.tmp
+*.temp
+*~
+.swp
