@@ -1,25 +1,25 @@
 # =========================
 # Python / Django (backend)
 # =========================
-coffeehouse/__pycache__/
-coffeehouse/*/__pycache__/
-coffeehouse/*.py[cod]
-coffeehouse/*/*.py[cod]
-coffeehouse/*$py.class
-coffeehouse/env/
-coffeehouse/venv/
-coffeehouse/.env
-coffeehouse/media/
-coffeehouse/staticfiles/
+coffehouse/__pycache__/
+coffehouse/*/__pycache__/
+coffehouse/*.py[cod]
+coffehouse/*/*.py[cod]
+coffehouse/*$py.class
+coffehouse/env/
+coffehouse/venv/
+coffehouse/.env
+coffehouse/media/
+coffehouse/staticfiles/
 
 # Django specific
-coffeehouse/db.sqlite3
-coffeehouse/local_settings.py
-coffeehouse/coffeehouse/settings.py
+coffehouse/db.sqlite3
+coffehouse/local_settings.py
+coffehouse/coffehouse/settings.py
 
 # Django migrations (ignore except __init__.py)
-coffeehouse/*/migrations/*.py
-!coffeehouse/*/migrations/__init__.py
+coffehouse/*/migrations/*.py
+!coffehouse/*/migrations/__init__.py
 
 # Redis
 dump.rdb
