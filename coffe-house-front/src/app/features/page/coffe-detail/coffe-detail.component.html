@@ -1,0 +1,20 @@
+<div class="coffee-detail" >
+  <h2>name </h2>
+
+  <img
+    [src]=" imagePreview || 'assets/images/caffeimg.jpg'"
+
+    class="coffee-image">
+
+  <p><strong>name :</strong>{{coffee?.name}}</p>
+  <p><strong>Type:</strong>{{coffee?.type}}</p>
+
+  <p><strong>Description:</strong>{{coffee?.description}}</p>
+
+  <p><strong>Price:</strong> {{coffee?.price}}</p>
+
+  <p><strong>restaurant:</strong>{{coffee?.added_by?.full_name}}</p>
+  <p><strong>address:</strong>{{coffee?.added_by?.address}}</p>
+</div>
+
+<p *ngIf="coffee">coffee-detail works!</p>

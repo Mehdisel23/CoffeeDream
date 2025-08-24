@@ -1,0 +1,46 @@
+<div class="restaurant-container">
+  <section class="hero">
+    <div class="hero-content">
+      <div class="hero-badge">Top Restaurants</div>
+      <h1>Discover the Best Places to Eat 🍽️</h1>
+      <p>Explore our curated selection of restaurants serving delicious meals in your city.</p>
+      <button class="cta-button">
+        <span>Browse Restaurants</span>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M5 12h14M12 5l7 7-7 7"/>
+        </svg>
+      </button>
+    </div>
+  </section>
+
+  <section class="featured">
+    <div class="search-bar">
+      <input type="text" placeholder="Search by location..."
+      [(ngModel)]="search"/>
+      <button (click)="searchRestaurent()">Search</button>
+    </div>
+
+    <div class="section-header">
+      <h2>Available Restaurants</h2>
+      <h3>Find your next meal</h3>
+    </div>
+
+    <div class="restaurant-list">
+      <div *ngFor="let restaurant of restaurants" class="restaurant-card">
+        <div class="restaurant-image-container">
+          <img [src]="restaurant.image || 'assets/images/default-restaurant.jpg'"
+               [alt]="restaurant.user?.full_name"
+               class="restaurant-image" />
+        </div>
+
+        <div class="restaurant-info">
+          <h1 class="restaurant-name">{{ restaurant.user?.full_name }}</h1>
+          <p class="restaurant-address"> {{ restaurant.address }}</p>
+          <p class="restaurant-description">
+            {{ restaurant.description | slice:0:30 }}{{ restaurant.description.length > 20 ? '...' : '' }}
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>

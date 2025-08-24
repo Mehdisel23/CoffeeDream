@@ -1,0 +1,133 @@
+<<<<<<< HEAD
+# =========================
+# Python / Django (backend)
+# =========================
+coffehouse/__pycache__/
+coffehouse/*/__pycache__/
+coffehouse/*.py[cod]
+coffehouse/*/*.py[cod]
+coffehouse/*$py.class
+coffehouse/env/
+coffehouse/venv/
+coffehouse/.env
+coffehouse/media/
+coffehouse/staticfiles/
+
+# Django specific
+coffehouse/db.sqlite3
+coffehouse/local_settings.py
+coffehouse/coffehouse/settings.py
+
+# Django migrations (ignore except __init__.py)
+coffehouse/*/migrations/*.py
+!coffehouse/*/migrations/__init__.py
+
+# Redis
+dump.rdb
+*.aof
+
+# =========================
+# Node / Angular (frontend)
+# =========================
+coffe-house-front/node_modules/
+coffe-house-front/dist/
+coffe-house-front/.angular/cache/
+coffe-house-front/.angular/
+coffe-house-front/npm-debug.log
+coffe-house-front/yarn-error.log
+coffe-house-front/yarn.lock
+coffe-house-front/package-lock.json
+coffe-house-front/tmp/
+coffe-house-front/out-tsc/
+coffe-house-front/bazel-out/
+coffe-house-front/.nx/cache
+coffe-house-front/coverage/
+
+# Angular environment files (if you have different configs)
+coffe-house-front/src/environments/environment.prod.ts
+coffe-house-front/src/environments/environment.local.ts
+
+# =========================
+# IDEs and editors
+# =========================
+.vscode/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+=======
+# See https://docs.github.com/get-started/getting-started-with-git/ignoring-files for more about ignoring files.
+
+# Compiled output
+/dist
+/tmp
+/out-tsc
+/bazel-out
+
+# Node
+/node_modules
+npm-debug.log
+yarn-error.log
+
+# IDEs and editors
+>>>>>>> bd8b4f3 (initial commit)
+.idea/
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+<<<<<<< HEAD
+*.sublime-project
+.history/
+
+# =========================
+# Miscellaneous / system
+# =========================
+.DS_Store
+Thumbs.db
+.sass-cache/
+connect.lock
+libpeerconnection.log
+testem.log
+typings/
+.env
+*.log
+
+# =========================
+# Git and version control
+# =========================
+*.orig
+*.rej
+
+# =========================
+# Temporary files
+# =========================
+*.tmp
+*.temp
+*~
+.swp
+=======
+
+# Visual Studio Code
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.history/*
+
+# Miscellaneous
+/.angular/cache
+.sass-cache/
+/connect.lock
+/coverage
+/libpeerconnection.log
+testem.log
+/typings
+
+# System files
+.DS_Store
+Thumbs.db
+>>>>>>> bd8b4f3 (initial commit)

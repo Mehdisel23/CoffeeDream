@@ -1,0 +1,10 @@
+<nav class="navbar">
+  <a routerLink="/" routerLinkActive="active">Home</a>
+  <a *ngIf="isLoggedIn && isSeller" routerLink="seller/add-coffee" routerLinkActive="active">Add Coffee</a>
+  <a *ngIf="isLoggedIn && isClient" routerLink="/buy-coffee" routerLinkActive="active">Buy Coffee</a>
+  <a *ngIf="isLoggedIn && isSeller" routerLink="seller/profile" routerLinkActive="active">Profile</a>
+  <a *ngIf = "!isSeller" routerLink="/client/resto" routerLinkActive="active">Restaurents</a>
+  <button *ngIf="isLoggedIn" (click)="logout()">Logout</button>
+  <a *ngIf="!isLoggedIn" routerLink="/login">Login</a>
+</nav>
+

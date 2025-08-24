@@ -1,0 +1,25 @@
+<div class="page-wrapper">
+  <div class="container">
+    <h1>Add New Coffee</h1>
+    <form class="coffee-form" [formGroup]="addForm"  (ngSubmit)="onSubmit()" enctype="multipart/form-data">
+      <label for="name">Coffee Name</label>
+      <input type="text" id="name" formControlName="name"  name="name" placeholder="Enter coffee name" required />
+
+      <label for="type">Coffee Type</label>
+      <input type="text" id="type" formControlName="type" name="type" placeholder="e.g. Latte, Espresso" required />
+
+      <label for="description">Description</label>
+      <textarea id="description" name="description" formControlName="description" placeholder="Describe the coffee" rows="4" required></textarea>
+
+      <label for="price">Price ($)</label>
+      <input type="number" id="price" formControlName="price" name="price" step="0.01" min="0" placeholder="Enter price" required />
+
+      <label for="image">Upload Image</label>
+      <input type="file" id="image" (change)="onFileSelected($event)" name="image" accept="image/*" />
+
+      <button type="submit" >Add Coffee</button>
+    </form>
+  </div>
+</div>
+
+

@@ -1,0 +1,536 @@
+// beautiful-coffee-home.component.scss
+
+.home-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #2C1810 0%, #8e704e 50%, #584537 100%);
+  position: relative;
+  overflow-x: hidden;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background:
+      radial-gradient(circle at 20% 80%, rgba(139, 69, 19, 0.15) 0%, transparent 50%),
+      radial-gradient(circle at 80% 20%, rgba(205, 133, 63, 0.15) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 1;
+  }
+}
+
+.hero {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  padding: 4rem 2rem 3rem;
+  background:
+    linear-gradient(135deg, rgb(88, 69, 55) 0%, rgb(202, 126, 61) 100%),
+    url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="dots" x="0" y="0" width="10" height="10" patternUnits="userSpaceOnUse"><circle cx="5" cy="5" r="1" fill="rgba(255,255,255,0.1)"/></pattern></defs><rect width="100" height="100" fill="url(%23dots)"/></svg>');
+  border-radius: 0 0 2rem 2rem;
+  margin-bottom: 3rem;
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+
+  .hero-content {
+    max-width: 800px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 3;
+  }
+
+  .hero-badge {
+    display: inline-block;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 0.4rem 1.2rem;
+    border-radius: 2rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #FFF8DC;
+    margin-bottom: 1.5rem;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+
+  h1 {
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 800;
+    color: #FFF8DC;
+    margin-bottom: 1rem;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    line-height: 1.2;
+
+    background: linear-gradient(135deg, #FFF8DC 0%, #F5DEB3 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  p {
+    font-size: 1.1rem;
+    color: rgba(255, 248, 220, 0.9);
+    margin-bottom: 2rem;
+    line-height: 1.6;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .cta-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem 2.5rem;
+    background: linear-gradient(135deg, #D2691E 0%, #FF8C00 100%);
+    color: white;
+    border: none;
+    border-radius: 3rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 8px 32px rgba(210, 105, 30, 0.4);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 40px rgba(210, 105, 30, 0.6);
+      background: linear-gradient(135deg, #FF8C00 0%, #D2691E 100%);
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
+
+    svg {
+      transition: transform 0.3s ease;
+    }
+
+    &:hover svg {
+      transform: translateX(4px);
+    }
+  }
+
+  .hero-decoration {
+    position: absolute;
+    top: 2rem;
+    right: 2rem;
+    display: flex;
+    gap: 0.5rem;
+    opacity: 0.6;
+
+    .coffee-steam {
+      width: 4px;
+      height: 60px;
+      background: linear-gradient(to top, transparent, rgba(255, 255, 255, 0.5), transparent);
+      border-radius: 2px;
+      animation: steam 3s ease-in-out infinite;
+
+      &:nth-child(2) {
+        animation-delay: 0.5s;
+      }
+
+      &:nth-child(3) {
+        animation-delay: 1s;
+      }
+    }
+  }
+}
+
+@keyframes steam {
+  0%, 100% {
+    transform: translateY(0) scaleY(1);
+    opacity: 0;
+  }
+  50% {
+    transform: translateY(-20px) scaleY(1.5);
+    opacity: 1;
+  }
+}
+
+.featured {
+  position: relative;
+  z-index: 2;
+  padding: 0 2rem 4rem;
+  max-width: 1400px;
+  margin: 0 auto;
+
+  .section-header {
+    text-align: center;
+    margin-bottom: 4rem;
+
+    h2 {
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 700;
+      color: #FFF8DC;
+      margin-bottom: 1rem;
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+    }
+
+    p {
+      font-size: 1.1rem;
+      color: rgba(255, 248, 220, 0.8);
+      font-style: italic;
+    }
+  }
+  .coffee-list {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); // 3 fixed columns
+    gap: 2rem;
+    animation: fadeInUp 0.8s ease-out;
+
+    @media (max-width: 1200px) {
+      grid-template-columns: repeat(2, 1fr); // 2 per line on medium screens
+    }
+
+    @media (max-width: 768px) {
+      grid-template-columns: 1fr; // 1 per line on small screens
+    }
+  }
+
+
+  .no-coffee {
+    grid-column: 1 / -1;
+
+    .empty-state {
+      text-align: center;
+      padding: 4rem 2rem;
+      color: rgba(255, 248, 220, 0.7);
+
+      svg {
+        margin-bottom: 1rem;
+        opacity: 0.5;
+      }
+
+      h3 {
+        font-size: 1.5rem;
+        margin-bottom: 0.5rem;
+        color: #FFF8DC;
+      }
+
+      p {
+        font-size: 1rem;
+        opacity: 0.8;
+      }
+    }
+  }
+
+  .coffee-card {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 1.5rem;
+    overflow: hidden;
+    box-shadow:
+      0 10px 30px rgba(0, 0, 0, 0.2),
+      0 1px 8px rgba(0, 0, 0, 0.1);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    animation: slideInUp 0.6s ease-out forwards;
+    opacity: 0;
+    transform: translateY(30px);
+
+    &.featured-item {
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(255, 248, 220, 0.95) 100%);
+      border: 2px solid rgba(210, 105, 30, 0.3);
+    }
+
+    &:hover {
+      transform: translateY(-8px) scale(1.02);
+      box-shadow:
+        0 20px 60px rgba(0, 0, 0, 0.3),
+        0 8px 16px rgba(210, 105, 30, 0.2);
+
+      .coffee-image {
+        transform: scale(1.1);
+      }
+
+      .image-overlay {
+        opacity: 1;
+      }
+
+      .card-shine::before {
+        transform: translateX(100%);
+      }
+    }
+
+    .coffee-image-container {
+      position: relative;
+      height: 250px;
+      overflow: hidden;
+
+      .coffee-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.4s ease;
+      }
+
+      .image-overlay {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(135deg, rgba(0, 0, 0, 0.6), rgba(139, 69, 19, 0.4));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+
+        .quick-view {
+          padding: 0.75rem 1.5rem;
+          background: rgba(255, 255, 255, 0.9);
+          border: none;
+          border-radius: 2rem;
+          font-weight: 600;
+          color: #2C1810;
+          cursor: pointer;
+          transition: all 0.3s ease;
+
+          &:hover {
+            background: white;
+            transform: scale(1.05);
+          }
+        }
+      }
+    }
+
+    .coffee-info {
+      padding: 1.5rem;
+
+      .coffee-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 1rem;
+
+        h3 {
+          font-size: 1.4rem;
+          font-weight: 700;
+          color: #2C1810;
+          margin: 0;
+          line-height: 1.3;
+        }
+
+        .rating {
+          display: flex;
+          flex-direction: column;
+          align-items: flex-end;
+          font-size: 0.875rem;
+
+          .stars {
+            color: #FFD700;
+            font-size: 1rem;
+            letter-spacing: 1px;
+          }
+
+          .rating-count {
+            color: #666;
+            margin-top: 0.25rem;
+          }
+        }
+      }
+
+      .coffee-type {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: #8B4513;
+        font-weight: 600;
+        margin-bottom: 0.75rem;
+        font-size: 0.95rem;
+
+        svg {
+          opacity: 0.7;
+        }
+      }
+
+      .coffee-description {
+        color: #555;
+        line-height: 1.6;
+        margin-bottom: 1.5rem;
+        font-size: 0.95rem;
+      }
+
+      .coffee-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        .coffee-price {
+          font-size: 1.5rem;
+          font-weight: 800;
+          color: #D2691E;
+          margin: 0;
+        }
+
+        .add-to-cart {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          padding: 0.75rem 1.25rem;
+          background: linear-gradient(135deg, #8B4513 0%, #A0522D 100%);
+          color: white;
+          border: none;
+          border-radius: 2rem;
+          font-weight: 600;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          font-size: 0.9rem;
+
+          &:hover {
+            background: linear-gradient(135deg, #A0522D 0%, #8B4513 100%);
+            transform: scale(1.05);
+          }
+
+          &:active {
+            transform: scale(0.98);
+          }
+        }
+      }
+    }
+
+    .card-shine {
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+
+      &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+        transition: transform 0.6s ease;
+        transform: translateX(-100%);
+      }
+    }
+  }
+}
+// Add to home.component.scss
+.loading-state {
+  text-align: center;
+  padding: 3rem;
+
+  .loading-spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #8B4513;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 1rem;
+  }
+}
+
+.error-state {
+  text-align: center;
+  padding: 3rem;
+
+  .error-message {
+    svg { color: #e74c3c; }
+    .retry-button {
+      background: #8B4513;
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+  }
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 2rem;
+
+  .pagination-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    border: 1px solid #ddd;
+    background: white;
+    border-radius: 4px;
+    cursor: pointer;
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.search-bar {
+  display: flex;
+  gap: 1.5rem; /* slightly more space between input and button */
+  margin-bottom: 5.5rem;
+  justify-content: center;
+  flex-wrap: wrap;
+
+  input {
+    padding: 0.8rem 1.5rem; /* taller and wider padding */
+    font-size: 1.2rem; /* bigger text */
+    border-radius: 2.5rem;
+    border: 1px solid #3f1b10; /* matches coffee tone */
+    background-color: #3f1b10; /* light coffee-cream background */
+    color: black; /* dark coffee text */
+    outline: none;
+    min-width: 280px; /* bigger default width */
+    transition: border-color 0.2s ease;
+
+    &:focus {
+      border-color: #8B4513;
+    }
+  }
+
+  button {
+    padding: 0.8rem 2rem; /* taller and wider button */
+    font-size: 1.1rem; /* bigger button text */
+    border-radius: 2.5rem;
+    border: none;
+    background: linear-gradient(135deg, #8B4513, #A0522D);
+    color: white;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background 0.3s ease;
+
+    &:hover {
+      background: linear-gradient(135deg, #A0522D, #8B4513);
+    }
+  }
+}

@@ -1,0 +1,194 @@
+<div>
+  <div class="coffee-profile-container">
+    <!-- Loading Spinner -->
+    <div *ngIf="loading" class="loading-spinner">
+      <p>Loading...</p>
+    </div>
+
+    <!-- Error/Success Message -->
+    <div *ngIf="message" class="message" [class.error]="message.includes('Failed')" [class.success]="message.includes('success')">
+      {{ message }}
+    </div>
+
+    <!-- Profile Content - Only show when seller data is loaded -->
+    <div *ngIf="seller">
+      <div class="top-card">
+        <button class="update-btn-top" (click)="onShowModal()">Update</button>
+
+        <div class="profile-pic-wrapper">
+          <img class="profile-pic"
+              [src]="imagePreview || seller.image || 'assets/images/default-profile.jpg'"
+              alt="Profile Picture" />
+          <input type="file"
+                id="profileUpload"
+                class="profile-upload"
+                accept="image/*"
+                (change)="onImageSelected($event)" />
+          <label for="profileUpload" class="upload-label">Change</label>
+        </div>
+
+        <div class="info">
+          <h2>{{ seller.full_name || 'No Name' }}</h2>
+          <p>{{ seller.address || 'No Address' }}</p>
+          <p>{{ seller.phone_number || 'No Phone' }}</p>
+          <div class="stars">★ ★ ★ ★ ☆</div>
+        </div>
+      </div>
+
+      <div class="description">
+        <h3>Description</h3>
+        <p>{{ seller.description || 'No description available' }}</p>
+      </div>
+
+    </div>
+
+    <!-- Show placeholder when no data is loaded -->
+    <div *ngIf="!seller && !loading" class="no-data">
+      <p>No profile data available.</p>
+    </div>
+  </div>
+  <section class="featured">
+    <div class="section-header">
+      <h2>Our Foood</h2>
+      <h3><p>Time to Enjoy ! </p></h3>
+    </div>
+
+    <div class="coffee-list">
+      <div *ngIf="coffee.length === 0" class="no-coffee">
+        <div class="empty-state">
+          <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M18 8h1a4 4 0 0 1 0 8h-1"/>
+            <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/>
+            <line x1="6" y1="1" x2="6" y2="4"/>
+            <line x1="10" y1="1" x2="10" y2="4"/>
+            <line x1="14" y1="1" x2="14" y2="4"/>
+          </svg>
+          <h3>No coffee found</h3>
+          <p>Check back soon for new arrivals!</p>
+        </div>
+      </div>
+
+      <div *ngFor="let coffee of coffee; let i = index"
+           class="coffee-card"
+           [class.featured-item]="i < 3"
+           [style.animation-delay.ms]="i * 150">
+
+
+        <div class="coffee-image-container">
+          <img
+            [src]="coffee.image || 'assets/images/caffeimg.jpg'"
+            [alt]="coffee.name"
+            class="coffee-image"
+            loading="lazy">
+          <div class="image-overlay">
+            <button class="quick-view">Quick View</button>
+          </div>
+        </div>
+
+        <div class="coffee-info">
+          <div class="coffee-header">
+            <h3>{{ coffee.name }}</h3>
+            <div class="rating">
+              <span class="stars">★★★★★</span>
+              <span class="rating-count">(4.8)</span>
+            </div>
+          </div>
+
+          <p class="coffee-type">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M18 8h1a4 4 0 0 1 0 8h-1"/>
+              <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/>
+            </svg>
+            {{ coffee.type }}
+          </p>
+
+          <p class="coffee-description">{{ coffee.description }}</p>
+
+          <div class="coffee-footer">
+            <p class="coffee-price">${{ coffee.price }}</p>
+
+            <!-- 🧑‍💼 SEller -->
+            <div  class="eller-actions">
+              <button class="delete-coffee" (click)="deleteCoffee(coffee.id!)">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M3 6h18M9 6v12M15 6v12M4 6l1 14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2l1-14"/>
+                </svg>
+                Delete
+              </button>
+
+              <!-- <button class="update-coffee" (click)="updateCoffee(coffee.id)">
+                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                   <path d="M12 20h9"/>
+                   <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4Z"/>
+                 </svg>
+                 Update
+               </button>-->
+            </div>
+          </div>
+        </div>
+
+        <div class="card-shine"></div>
+      </div>
+    </div>
+    <div class="pagination" *ngIf="loading && !message && coffeeCount > 0">
+      <button
+        (click)="prevPage()"
+        [disabled]="!prevPageUrl || loading"
+        class="pagination-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M15 18l-6-6 6-6"/>
+        </svg>
+        Previous
+      </button>
+
+      <span class="pagination-info">
+        Page {{ currentPage }} of {{ totalPages }}
+
+      </span>
+
+      <button
+        (click)="nextPage()"
+        [disabled]="!nextPageUrl || loading"
+        class="pagination-btn">
+        Next
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M9 18l6-6-6-6"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Debug Controls (remove in production) -->
+    <div class="debug-controls" style="margin-top: 2rem; text-align: center;">
+      <small style="display: block; margin-top: 0.5rem; opacity: 0.7;">
+        Cache Status: Check console for details
+      </small>
+    </div>
+  </section>
+  </div>
+  <!-- Modal -->
+  <div class="modal-backdrop" *ngIf="showModal">
+    <div class="modal-content">
+      <span class="close-btn" (click)="closeModal()">×</span>
+      <h3>Update Seller Info</h3>
+      <form [formGroup]="profileForm" (ngSubmit)="onSubmit()">
+        <div class="form-group">
+          <label>Full Name</label>
+          <input formControlName="full_name" type="text" />
+        </div>
+        <div class="form-group" >
+          <label>Phone Number</label>
+          <input formControlName="phone_number" type="text" />
+        </div>
+        <div class="form-group">
+          <label>Address</label>
+          <input formControlName="address" type="text" />
+        </div>
+        <div class="form-group">
+          <label>Description</label>
+          <input formControlName="description" type="text" />
+        </div>
+          <button type="submit">Save</button>
+      </form>
+    </div>
+  </div>
+

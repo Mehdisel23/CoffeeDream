@@ -1,0 +1,16 @@
+<div class="verify-container">
+  <div *ngIf="loading" class="loading-box">
+    <div class="spinner"></div>
+    <p>Verifying your token...</p>
+  </div>
+
+  <div *ngIf="!loading" class="status-box" [ngClass]="{
+    'success': statusMessage.includes('success'),
+    'error': statusMessage.includes('Invalid') || statusMessage.includes('No token')
+  }">
+    <p>{{ statusMessage }}</p>
+  </div>
+  <div class="loading-box" *ngIf="statusMessage === 'Token verified successfully!'" >
+    <a routerLink = "/login"> Go to login </a>
+  </div>
+</div>
