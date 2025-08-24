@@ -1,9 +1,9 @@
-from django.contrib.auth.views import LoginView, LogoutView
+from django.contrib.auth.views import LoginView
 from django.urls import path
 
 from userapp.views import UserRegisterView, verify_token, CustomTokenObtainPairView, SellerProfileView, \
     SellerRegisterView, AddImageSellerProfileView, SellerProfileUpdateView, GetAllRestaurants, SearchRestaurantsView, \
-    GetRestaurentById
+    GetRestaurentById, Sortir
 
 urlpatterns = [
 
@@ -12,7 +12,7 @@ urlpatterns = [
     path("auth/verify-token/<str:token>/", verify_token, name="verify_token"),
     path("auth/login/" , CustomTokenObtainPairView.as_view() , name="login"),
     path("profile/seller/" , SellerProfileView.as_view() , name="seller_profile"),
-    path("auth/logout/", LogoutView.as_view() , name="logout"),
+    path("auth/logout/", Sortir.as_view() , name="logout"),
     path("profile/seller/addImage/" ,AddImageSellerProfileView.as_view() , name="add_image_seller_profile"),
     path("profile/seller/update/" ,SellerProfileUpdateView.as_view() , name="update_seller_profile"),
     path("allrestaurents/" , GetAllRestaurants.as_view() , name="allrestaurants"),

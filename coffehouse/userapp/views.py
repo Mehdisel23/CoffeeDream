@@ -201,8 +201,8 @@ class SellerProfileView(APIView):
         serializer = SellerProfileSerializer(seller)
         return Response(serializer.data , status= status.HTTP_200_OK)
 
-@method_decorator(csrf_exempt, name='dispatch')
-class Logout(APIView):
+
+class Sortir(APIView):
     permission_classes = [IsAuthenticated]
     def post(self, request, *args, **kwargs):
         print(f"=== LOGOUT DEBUG ===")
@@ -211,7 +211,7 @@ class Logout(APIView):
         print(f"Content-Type: {request.content_type}")
         print(f"Authorization header: {request.headers.get('Authorization', 'Not present')}")
         print(f"===================")
-        refresh= request.data.get("refresh_token")
+        refresh  = request.data.get("refresh_token")
         print(refresh)
 
         if not refresh:
